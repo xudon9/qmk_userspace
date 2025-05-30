@@ -14,7 +14,7 @@ AlwaysBreakBeforeMultilineStrings: 'false'
 BinPackArguments: 'true'
 BinPackParameters: 'true'
 ColumnLimit: '1000'
-IndentCaseLabels: 'true'
+# IndentCaseLabels: 'true'
 IndentPPDirectives: AfterHash
 IndentWidth: '4'
 MaxEmptyLinesToKeep: '1'
@@ -26,5 +26,6 @@ SpaceInEmptyParentheses: 'false'
 SpacesBeforeTrailingComments: 1
 TabWidth: '4'
 UseTab: Never
+IndentCaseLabels: 'false'
 
 ...
