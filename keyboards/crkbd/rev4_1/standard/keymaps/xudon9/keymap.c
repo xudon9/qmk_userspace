@@ -29,7 +29,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "keymap_us.h"
 #include "modifiers.h"
 #include "quantum.h"
+#include "quantum_keycodes.h"
 #include QMK_KEYBOARD_H
+
 #include "layout.h"
 
 enum layers {
@@ -48,12 +50,13 @@ enum custom_keycodes {
     STDCC,
     USRNAME,
     TMUXESC,
+    WPASS,
     SRCHSEL,
-    RGBNEXT,
-    RGBHUP,
-    RGBHRND,
-    RGBDEF1,
-    RGBDEF2,
+    // RGBNEXT,
+    // RGBHUP,
+    // RGBHRND,
+    // RGBDEF1,
+    // RGBDEF2,
     // Macros invoked through the Magic key.
     // M_DOCSTR,
     // M_EQEQ,
@@ -69,21 +72,29 @@ enum custom_keycodes {
     // M_NOOP,
 };
 
-#define HR_A LALT_T(KC_A)
-#define HR_S LT(L_SYM, KC_S)
-#define HR_D LSFT_T(KC_D)
-#define HR_F LCTL_T(KC_F)
-#define HR_V LT(L_NAV, KC_V)
-#define HR_Z LGUI_T(KC_Z)
+// HRM: Index fingers
+#define HR_F    LT(L_NAV, KC_F)
+#define HR_J    LT(L_NUM, KC_J)
+// HRM: Middle fingers
+#define HR_D    LALT_T(KC_D)
+#define HR_K    RALT_T(KC_K)
+// HRM: Ring fingers
+#define HR_S    LT(L_SYM, KC_S)
+#define HR_L    LT(L_SYM, KC_L)
+// HRM: Pinky fingers
+#define HR_A    LGUI_T(KC_A)
+#define HR_SCLN RGUI_T(KC_SCLN)
+// HRM: Others
+#define HR_V    LT(L_EXT, KC_V)
+#define HR_M    LT(L_WIN, KC_M)
+#define HR_SLSH LT(L_FUN, KC_SLSH)
 
-#define HR_M LT(L_NUM, KC_M)
-#define HR_J RCTL_T(KC_J)
-#define HR_K RSFT_T(KC_K)
-#define HR_L LT(L_SYM, KC_L)
-#define HR_SCLN RALT_T(KC_SCLN)
-#define HR_DOT LT(L_WIN, KC_DOT)
-#define HR_SLSH RGUI_T(KC_SLSH)
-#define EX_MINS LT(L_EXT, KC_MINS)
+#define THMB_L3  LT(L_NAV, KC_LBRC)
+#define THMB_R3  LT(L_NAV, KC_RBRC)
+#define THMB_L2  LSFT_T(KC_ESC)
+#define THMB_R2  RSFT_T(KC_BSPC)
+#define THMB_L1  LCTL_T(KC_SPC)
+#define THMB_R1  RCTL_T(KC_ENT)
 
 #define C_PGUP C(KC_PGUP)
 #define C_PGDN C(KC_PGDN)
@@ -99,24 +110,24 @@ enum custom_keycodes {
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [L_BASE] = LAYOUT_LR_THUMB(
-        KC_GRV , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   , KC_0   ,
-        KC_TAB , HR_A   , HR_S   , HR_D   , HR_F   , KC_G   , KC_UNDS,
-        EX_MINS, HR_Z   , KC_X   , KC_C   , HR_V   , KC_B   ,
+        KC_GRV , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   , KC_LEFT,
+        KC_TAB , HR_A   , HR_S   , HR_D   , HR_F   , KC_G   , KC_RGHT,
+        KC_MINS, KC_Z   , KC_X   , KC_C   , HR_V   , KC_B   ,
 
-        KC_DLR , KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSLS,
+        KC_KP_0, KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSLS,
         KC_COLN, KC_H   , HR_J   , HR_K   , HR_L   , HR_SCLN, KC_QUOT,
-                 KC_N   , HR_M   , KC_COMM, HR_DOT , HR_SLSH, KC_EQL ,
+                 KC_N   , HR_M   , KC_COMM, KC_DOT , HR_SLSH, KC_EQL ,
 
-        LT(L_NAV, KC_LBRC), KC_ESC , KC_SPC ,          KC_ENT , KC_BSPC, LT(L_NAV, KC_RBRC)
+        THMB_L3, THMB_L2, THMB_L1,          THMB_R1, THMB_R2, THMB_R3
     ),
 
     [L_SYM] = LAYOUT_LR_THUMB(
         TMUXESC, KC_GRV , KC_LABK, KC_RABK, KC_MINS, KC_PIPE, _______,
-        KC_LCTL, KC_EXLM, KC_ASTR, KC_SLSH, KC_EQL , KC_AMPR, _______,
+        WPASS  , KC_EXLM, KC_ASTR, KC_SLSH, KC_EQL , KC_AMPR, _______,
         STDCC  , KC_TILD, KC_PLUS, KC_LBRC, KC_RBRC, KC_PERC,
 
-        _______, KC_CIRC, KC_LCBR, KC_RCBR, KC_DLR , KC_TODO, _______,
-        _______, KC_HASH, KC_LPRN, KC_RPRN, KC_SCLN, KC_DQUO, KC_RCTL,
+        _______, KC_CIRC, KC_LCBR, KC_RCBR, KC_DLR , ARROW  , _______,
+        _______, KC_HASH, KC_LPRN, KC_RPRN, KC_SCLN, KC_DQUO, WPASS  ,
                  KC_AT  , KC_COLN, KC_COMM, KC_DOT , KC_QUOT, _______,
 
         _______, USRNAME, _______,          _______, _______, _______
@@ -125,13 +136,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [L_NAV] = LAYOUT_LR_THUMB(
         _______, KC_WREF, KC_HOME , KC_UP  , KC_END, KC_PGUP, _______,
         _______, KC_LALT, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, _______,
-        _______, KC_LGUI, KC_PGUP, KC_PGDN, XXXXXXX, XXXXXXX,
+        _______, KC_LGUI, KC_PGUP, KC_PGDN, SELLINE, XXXXXXX,
 
         _______, KC_PGUP, KC_HOME,   KC_UP,  KC_END, SRCHSEL, _______,
         _______, KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL , _______,
-                 C(KC_Z), SELWBAK, SELWORD, KC_APP , XXXXXXX, _______,
+                 C(KC_Z), SELWBAK, SELWORD, KC_APP , C(KC_R), _______,
 
-        _______, KC_WBAK,  G_TAB ,           _______, QK_LLCK, _______
+        _______, KC_WBAK,  G_TAB ,          _______, QK_LLCK, _______
     ),
 
     [L_NUM] = LAYOUT_LR_THUMB(
@@ -140,10 +151,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, KC_X   ,    KC_6,    KC_5,    KC_4, KC_PERC,
 
         _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-        _______, XXXXXXX, XXXXXXX, KC_RSFT, KC_RCTL, KC_LALT, _______,
-                 XXXXXXX, XXXXXXX, KC_COMM, KC_DOT , KC_LGUI, _______,
+        _______, XXXXXXX, XXXXXXX, KC_RALT, KC_RSFT, KC_RGUI, KC_RCTL,
+                 XXXXXXX, XXXXXXX, KC_COMM, KC_DOT , _______, KC_RSFT,
 
-        KC_DOT , KC_BSPC, KC_0   ,          KC_E   , QK_LLCK, _______
+        KC_DOT , KC_BSPC, KC_0   ,          KC_RCTL, QK_LLCK, _______
     ),
 
     [L_WIN] = LAYOUT_LR_THUMB(
@@ -151,29 +162,29 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, XXXXXXX, G(KC_3), G(KC_2), G(KC_1), G(KC_D), _______,
         _______, XXXXXXX, G(KC_6), G(KC_5), G(KC_4), G(KC_W),
 
-        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        _______, XXXXXXX, XXXXXXX, KC_RSFT, XXXXXXX, KC_LALT, XXXXXXX,
+        _______, XXXXXXX, XXXXXXX, KC_VOLU, XXXXXXX, XXXXXXX, XXXXXXX,
+        _______, XXXXXXX, KC_MPRV, KC_VOLD, KC_MNXT, KC_LALT, XXXXXXX,
                  XXXXXXX, SA_TAB , A_TAB  , XXXXXXX, XXXXXXX, G_ENT  ,
 
-        _______, _______, _______,          _______, QK_LLCK, _______
+        _______, _______, _______,          KC_MPLY, QK_LLCK, _______
     ),
 
     [L_FUN] = LAYOUT_LR_THUMB(
         XXXXXXX, KC_F12 , KC_F9  , KC_F8  , KC_F7  , XXXXXXX, XXXXXXX,
-        XXXXXXX, KC_F10 , KC_F3  , KC_F2  , KC_F1  , XXXXXXX, XXXXXXX,
+        KC_CAPS, KC_F10 , KC_F3  , KC_F2  , KC_F1  , XXXXXXX, XXXXXXX,
         XXXXXXX, KC_F11 , KC_F6  , KC_F5  , KC_F4  , XXXXXXX,
 
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, QK_BOOT,
-        XXXXXXX, XXXXXXX, XXXXXXX, KC_RSFT, KC_RCTL, KC_LALT, XXXXXXX,
-                 XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_RGUI, QK_RBT ,
+        XXXXXXX, XXXXXXX, XXXXXXX, KC_INS , XXXXXXX, XXXXXXX, QK_BOOT,
+        XXXXXXX, XXXXXXX, KC_PSCR, KC_DEL , XXXXXXX, XXXXXXX, XXXXXXX,
+                 XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, QK_RBT ,
 
         _______, _______, DB_TOGG,          _______, QK_LLCK, _______
     ),
 
     [L_EXT] = LAYOUT_LR_THUMB(
-        QK_BOOT, _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______,
         XXXXXXX, RM_HUEU, RM_SATU, RM_VALU, _______, _______, _______,
-        XXXXXXX, RM_HUED, RM_SATD, RM_VALD, _______, _______,
+        QK_BOOT, RM_HUED, RM_SATD, RM_VALD, _______, _______,
 
         CG_NORM, OM_W_U , OM_BTN1, OM_U   , OM_BTN2, SRCHSEL, CG_TOGG,
         CG_SWAP, OM_W_D , OM_L   , OM_D   , OM_R   , OM_SLOW, _______,
@@ -196,21 +207,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 // clang-format on
 
-bool is_layer_locked(uint8_t layer) {
-    // Check if the layer is locked by checking if the layer bit is set in the
-    // layer state.
-    return (bool)(layer_state & ((layer_state_t)0x1 << layer));
-}
+// Check if the layer is locked by checking if the layer bit is set in the
+// layer state.
+#define M_is_layer_locked(layer) ((bool)(layer_state & ((layer_state_t)0x1 << (layer))))
 
 ///////////////////////////////////////////////////////////////////////////////
 // User macro callbacks (https://docs.qmk.fm/feature_macros)
 ///////////////////////////////////////////////////////////////////////////////
 
 const uint16_t caps_combo[] PROGMEM = {KC_C, KC_COMM, COMBO_END};
-const uint16_t fn_combo[] PROGMEM   = {KC_H, HR_J, COMBO_END};
+// const uint16_t fn_combo[] PROGMEM   = {KC_H, HR_J, COMBO_END};
 combo_t        key_combos[]         = {
     COMBO(caps_combo, CW_TOGG),  // C and , => Activate Caps Word
-    COMBO(fn_combo, OSL(L_FUN)), // H and J => L_FUN Layer
+    // COMBO(fn_combo, OSL(L_FUN)), // H and J => L_FUN Layer
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -228,7 +237,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
 
         // NAV stays on while layer locked or while either ring or index is held.
-        if (!(is_layer_locked(L_NAV) || left_home_ring_held || left_home_index_held)) {
+        if (!(M_is_layer_locked(L_NAV) || left_home_ring_held || left_home_index_held)) {
             layer_off(L_NAV);
         }
     }
@@ -241,7 +250,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     );
     const uint8_t shift_mods = all_mods & MOD_MASK_SHIFT;
     const bool    alt        = all_mods & (MOD_BIT_LALT | MOD_BIT_RALT);
-    switch (keycode) {
+    // switch (keycode) {
     // case EX_COL:
     //     if (record->tap.count) {
     //         if (record->event.pressed) {
@@ -256,11 +265,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     //         }
     //         return false;
     //     }
-        return true;
-    }
+    //    return true;
+    //}
 
     if (record->event.pressed) {
         switch (keycode) {
+        case WPASS:
+            SEND_STRING_DELAY(WPASS_STR, TAP_CODE_DELAY);
+            return false;
         case UPDIR:
             SEND_STRING_DELAY("../", TAP_CODE_DELAY);
             return false;
@@ -276,6 +288,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case ARROW: {
             char const *string = alt ? (shift_mods ? "<==>" : "<->") : (shift_mods ? "=>" : "->");
             SEND_STRING_DELAY(string, TAP_CODE_DELAY);
+            return false;
+        case SRCHSEL:  // Searches the current selection in a new tab.
+            // Mac users, change LCTL to LGUI.
+            SEND_STRING_DELAY(
+                SS_LCTL("ct") SS_DELAY(100) SS_LCTL("v") SS_TAP(X_ENTER),
+                TAP_CODE_DELAY);
             return false;
         }
         }

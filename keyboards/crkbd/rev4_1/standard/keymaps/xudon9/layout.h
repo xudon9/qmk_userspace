@@ -1,5 +1,6 @@
-// clang-format off
+#include "personal.h"
 
+// clang-format off
 #define LAYOUT_LR_THUMB(                \
     k00, k01, k02, k03, k04, k05, k06,  \
     k10, k11, k12, k13, k14, k15, k16,  \
