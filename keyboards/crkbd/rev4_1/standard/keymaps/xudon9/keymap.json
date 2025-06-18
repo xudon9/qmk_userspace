@@ -1,0 +1,6 @@
+{
+    "modules": [
+        "getreuer/orbital_mouse",
+        "getreuer/select_word"
+    ]
+}

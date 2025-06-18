@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "action.h"
 #include "action_layer.h"
+#include "community_modules.h"
 #include "keycodes.h"
 #include "keymap_us.h"
 #include "modifiers.h"
@@ -71,18 +72,18 @@ enum custom_keycodes {
 #define HR_A LALT_T(KC_A)
 #define HR_S LT(L_SYM, KC_S)
 #define HR_D LSFT_T(KC_D)
-#define HR_F LT(L_NAV, KC_F)
-#define HR_V LCTL_T(KC_V)
+#define HR_F LCTL_T(KC_F)
+#define HR_V LT(L_NAV, KC_V)
 #define HR_Z LGUI_T(KC_Z)
 
-#define HR_J LT(L_NUM, KC_J)
+#define HR_M LT(L_NUM, KC_M)
+#define HR_J RCTL_T(KC_J)
 #define HR_K RSFT_T(KC_K)
 #define HR_L LT(L_SYM, KC_L)
 #define HR_SCLN RALT_T(KC_SCLN)
-#define HR_M RCTL_T(KC_M)
 #define HR_DOT LT(L_WIN, KC_DOT)
 #define HR_SLSH RGUI_T(KC_SLSH)
-#define EX_COL LT(L_EXT, KC_SCLN)
+#define EX_MINS LT(L_EXT, KC_MINS)
 
 #define C_PGUP C(KC_PGUP)
 #define C_PGDN C(KC_PGDN)
@@ -92,37 +93,21 @@ enum custom_keycodes {
 #define SA_TAB S(A(KC_TAB)) // Shift+Alt+Tab
 
 #define KC_TODO _______ // Placeholder for TODO key
-#define SELLINE _______ // Placeholder for selection line key
 
 #define EXT_UNDS KC_UNDS // LT(L_EXT, KC_UNDS)
 
 // clang-format off
-#define LAYOUT_LR_THUMB(                \
-    k00, k01, k02, k03, k04, k05, k06,  \
-    k10, k11, k12, k13, k14, k15, k16,  \
-    k20, k21, k22, k23, k24, k25,       \
-                                        \
-    k46, k45, k44, k43, k42, k41, k40,  \
-    k56, k55, k54, k53, k52, k51, k50,  \
-         k65, k64, k63, k62, k61, k60,  \
-    k33, k34, k35,       k75, k74, k73) \
-         LAYOUT_split_3x6_3_ex2(                                            \
-    k00, k01, k02, k03, k04, k05, k06, k46, k45, k44, k43, k42, k41, k40,   \
-    k10, k11, k12, k13, k14, k15, k16, k56, k55, k54, k53, k52, k51, k50,   \
-    k20, k21, k22, k23, k24, k25,           k65, k64, k63, k62, k61, k60,   \
-                   k33, k34, k35,           k75, k74, k73)
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [L_BASE] = LAYOUT_LR_THUMB(
-        KC_GRV , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   , KC_MINS,
-        KC_TAB , HR_A   , HR_S   , HR_D   , HR_F   , KC_G   , KC_EQL ,
-        EX_COL , HR_Z   , KC_X   , KC_C   , HR_V   , KC_B   ,
+        KC_GRV , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   , KC_0   ,
+        KC_TAB , HR_A   , HR_S   , HR_D   , HR_F   , KC_G   , KC_UNDS,
+        EX_MINS, HR_Z   , KC_X   , KC_C   , HR_V   , KC_B   ,
 
-        KC_LBRC, KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSLS,
-        KC_RBRC, KC_H   , HR_J   , HR_K   , HR_L   , HR_SCLN, KC_QUOT,
-                 KC_N   , HR_M   , KC_COMM, HR_DOT , HR_SLSH, _______,
+        KC_DLR , KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSLS,
+        KC_COLN, KC_H   , HR_J   , HR_K   , HR_L   , HR_SCLN, KC_QUOT,
+                 KC_N   , HR_M   , KC_COMM, HR_DOT , HR_SLSH, KC_EQL ,
 
-        KC_UNDS, KC_ESC , KC_SPC ,          KC_ENT , KC_BSPC, LT(L_NAV, KC_0)
+        LT(L_NAV, KC_LBRC), KC_ESC , KC_SPC ,          KC_ENT , KC_BSPC, LT(L_NAV, KC_RBRC)
     ),
 
     [L_SYM] = LAYOUT_LR_THUMB(
@@ -138,13 +123,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [L_NAV] = LAYOUT_LR_THUMB(
-        _______, KC_WREF, C_PGUP , C_PGDN , XXXXXXX, XXXXXXX, _______,
-        _______, KC_LALT, KC_LCTL, KC_LSFT, SELLINE, MS_BTN1, _______,
+        _______, KC_WREF, KC_HOME , KC_UP  , KC_END, KC_PGUP, _______,
+        _______, KC_LALT, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, _______,
         _______, KC_LGUI, KC_PGUP, KC_PGDN, XXXXXXX, XXXXXXX,
 
         _______, KC_PGUP, KC_HOME,   KC_UP,  KC_END, SRCHSEL, _______,
-        _______, KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL , KC_BSLS,
-                 KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE, KC_TILD,
+        _______, KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL , _______,
+                 C(KC_Z), SELWBAK, SELWORD, KC_APP , XXXXXXX, _______,
 
         _______, KC_WBAK,  G_TAB ,           _______, QK_LLCK, _______
     ),
@@ -155,10 +140,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, KC_X   ,    KC_6,    KC_5,    KC_4, KC_PERC,
 
         _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-        _______, XXXXXXX, XXXXXXX, KC_E   , KC_RCTL, KC_LALT, _______,
+        _______, XXXXXXX, XXXXXXX, KC_RSFT, KC_RCTL, KC_LALT, _______,
                  XXXXXXX, XXXXXXX, KC_COMM, KC_DOT , KC_LGUI, _______,
 
-        _______, _______, _______,          KC_0   , QK_LLCK, _______
+        KC_DOT , KC_BSPC, KC_0   ,          KC_E   , QK_LLCK, _______
     ),
 
     [L_WIN] = LAYOUT_LR_THUMB(
@@ -186,15 +171,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [L_EXT] = LAYOUT_LR_THUMB(
-        _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______,
+        QK_BOOT, _______, _______, _______, _______, _______, _______,
+        XXXXXXX, RM_HUEU, RM_SATU, RM_VALU, _______, _______, _______,
+        XXXXXXX, RM_HUED, RM_SATD, RM_VALD, _______, _______,
 
-        _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______,
+        CG_NORM, OM_W_U , OM_BTN1, OM_U   , OM_BTN2, SRCHSEL, CG_TOGG,
+        CG_SWAP, OM_W_D , OM_L   , OM_D   , OM_R   , OM_SLOW, _______,
                  _______, _______, _______, _______, _______, _______,
 
-        _______, _______, _______,          _______, QK_LLCK, _______
+        _______, RM_NEXT, RM_TOGG,          OM_BTN1, QK_LLCK, _______
     )
 
     // [1] = LAYOUT_LR_THUMB(
@@ -257,20 +242,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     const uint8_t shift_mods = all_mods & MOD_MASK_SHIFT;
     const bool    alt        = all_mods & (MOD_BIT_LALT | MOD_BIT_RALT);
     switch (keycode) {
-    case EX_COL:
-        if (record->tap.count) {
-            if (record->event.pressed) {
-                if (shift_mods) {
-                    del_weak_mods(MOD_MASK_SHIFT);
-                    unregister_mods(MOD_MASK_SHIFT);
-                    tap_code_delay(KC_SCLN, TAP_CODE_DELAY);
-                    set_mods(mods);
-                } else {
-                    tap_code16_delay(KC_COLN, TAP_CODE_DELAY);
-                }
-            }
-            return false;
-        }
+    // case EX_COL:
+    //     if (record->tap.count) {
+    //         if (record->event.pressed) {
+    //             if (shift_mods) {
+    //                 del_weak_mods(MOD_MASK_SHIFT);
+    //                 unregister_mods(MOD_MASK_SHIFT);
+    //                 tap_code_delay(KC_SCLN, TAP_CODE_DELAY);
+    //                 set_mods(mods);
+    //             } else {
+    //                 tap_code16_delay(KC_COLN, TAP_CODE_DELAY);
+    //             }
+    //         }
+    //         return false;
+    //     }
         return true;
     }
 
@@ -297,4 +282,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
 
     return true;
+}
+
+bool select_word_host_is_mac(void) {
+  return mod_config(MOD_LGUI) == MOD_LCTL;  // GUI/Ctrl swapped => Mac.
 }
