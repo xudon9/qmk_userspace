@@ -73,28 +73,28 @@ enum custom_keycodes {
 };
 
 // HRM: Index fingers
-#define HR_F    LT(L_NAV, KC_F)
-#define HR_J    LT(L_NUM, KC_J)
+#define HR_F LT(L_NAV, KC_F)
+#define HR_J LT(L_NUM, KC_J)
 // HRM: Middle fingers
-#define HR_D    LALT_T(KC_D)
-#define HR_K    RALT_T(KC_K)
+#define HR_D LALT_T(KC_D)
+#define HR_K RALT_T(KC_K)
 // HRM: Ring fingers
-#define HR_S    LT(L_SYM, KC_S)
-#define HR_L    LT(L_SYM, KC_L)
+#define HR_S LT(L_SYM, KC_S)
+#define HR_L LT(L_SYM, KC_L)
 // HRM: Pinky fingers
-#define HR_A    LGUI_T(KC_A)
+#define HR_A LGUI_T(KC_A)
 #define HR_SCLN RGUI_T(KC_SCLN)
 // HRM: Others
-#define HR_V    LT(L_EXT, KC_V)
-#define HR_M    LT(L_WIN, KC_M)
+#define HR_V LT(L_EXT, KC_V)
+#define HR_M LT(L_WIN, KC_M)
 #define HR_SLSH LT(L_FUN, KC_SLSH)
 
-#define THMB_L3  LT(L_NAV, KC_LBRC)
-#define THMB_R3  LT(L_NAV, KC_RBRC)
-#define THMB_L2  LSFT_T(KC_ESC)
-#define THMB_R2  RSFT_T(KC_BSPC)
-#define THMB_L1  LCTL_T(KC_SPC)
-#define THMB_R1  RCTL_T(KC_ENT)
+#define THMB_L3 LT(L_NAV, KC_LBRC)
+#define THMB_R3 LT(L_NAV, KC_RBRC)
+#define THMB_L2 LSFT_T(KC_ESC)
+#define THMB_R2 RSFT_T(KC_BSPC)
+#define THMB_L1 LCTL_T(KC_SPC)
+#define THMB_R1 RCTL_T(KC_ENT)
 
 #define C_PGUP C(KC_PGUP)
 #define C_PGDN C(KC_PGDN)
@@ -186,11 +186,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         XXXXXXX, RM_HUEU, RM_SATU, RM_VALU, _______, _______, _______,
         QK_BOOT, RM_HUED, RM_SATD, RM_VALD, _______, _______,
 
-        CG_NORM, OM_W_U , OM_BTN1, OM_U   , OM_BTN2, SRCHSEL, CG_TOGG,
-        CG_SWAP, OM_W_D , OM_L   , OM_D   , OM_R   , OM_SLOW, _______,
+        _______, OM_W_U , OM_BTN1, OM_U   , OM_BTN2, SRCHSEL, CG_TOGG,
+        _______, OM_W_D , OM_L   , OM_D   , OM_R   , OM_SLOW, _______,
                  _______, _______, _______, _______, _______, _______,
 
-        _______, RM_NEXT, RM_TOGG,          OM_BTN1, QK_LLCK, _______
+        RM_PREV, RM_NEXT, RM_TOGG,          OM_BTN1, QK_LLCK, _______
     )
 
     // [1] = LAYOUT_LR_THUMB(
@@ -217,8 +217,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 const uint16_t caps_combo[] PROGMEM = {KC_C, KC_COMM, COMBO_END};
 // const uint16_t fn_combo[] PROGMEM   = {KC_H, HR_J, COMBO_END};
-combo_t        key_combos[]         = {
-    COMBO(caps_combo, CW_TOGG),  // C and , => Activate Caps Word
+combo_t key_combos[] = {
+    COMBO(caps_combo, CW_TOGG), // C and , => Activate Caps Word
     // COMBO(fn_combo, OSL(L_FUN)), // H and J => L_FUN Layer
 };
 
@@ -286,14 +286,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             SEND_STRING_DELAY("xudon9", TAP_CODE_DELAY);
             return false;
         case ARROW: {
-            char const *string = alt ? (shift_mods ? "<==>" : "<->") : (shift_mods ? "=>" : "->");
+            char const *string = alt ? (shift_mods ? "<=>" : "<->") : (shift_mods ? "=>" : "->");
             SEND_STRING_DELAY(string, TAP_CODE_DELAY);
             return false;
-        case SRCHSEL:  // Searches the current selection in a new tab.
+        case SRCHSEL: // Searches the current selection in a new tab.
             // Mac users, change LCTL to LGUI.
-            SEND_STRING_DELAY(
-                SS_LCTL("ct") SS_DELAY(100) SS_LCTL("v") SS_TAP(X_ENTER),
-                TAP_CODE_DELAY);
+            SEND_STRING_DELAY(SS_LCTL("ct") SS_DELAY(100) SS_LCTL("v") SS_TAP(X_ENTER), TAP_CODE_DELAY);
             return false;
         }
         }
@@ -303,5 +301,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 bool select_word_host_is_mac(void) {
-  return mod_config(MOD_LGUI) == MOD_LCTL;  // GUI/Ctrl swapped => Mac.
+    return mod_config(MOD_LGUI) == MOD_LCTL; // GUI/Ctrl swapped => Mac.
 }
+
+#if defined(OS_DETECTION_ENABLE)
+bool process_detected_host_os_user(os_variant_t os) {
+    if (os == OS_MACOS) {
+        keymap_config.swap_lctl_lgui = true;
+        keymap_config.swap_rctl_rgui = true;
+    } else {
+        keymap_config.swap_lctl_lgui = false;
+        keymap_config.swap_rctl_rgui = false;
+    }
+    return true;
+}
+#endif // OS_DETECTION_ENABLE
