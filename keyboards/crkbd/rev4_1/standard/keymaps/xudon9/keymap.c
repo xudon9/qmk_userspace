@@ -36,13 +36,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 enum layers {
     L_BASE,
+    L_ALPHA,
     L_SYM,
     L_NAV,
     L_NUM,
     L_WIN,
     L_FUN,
     L_EXT,
-    L_ALPHA,
 };
 
 enum custom_keycodes {
@@ -122,6 +122,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         THMB_L3, THMB_L2, THMB_L1,          THMB_R1, THMB_R2 , THMB_R3
     ),
 
+    [L_ALPHA] = LAYOUT_LR_THUMB(
+        KC_ESC , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T    , KC_LCTL,
+        KC_TAB , KC_A   , KC_S   , KC_D   , KC_F   , KC_G    , KC_LSFT,
+        KC_GRV , KC_Z   , KC_X   , KC_C   , KC_V   , KC_B    ,
+
+        KC_LALT, KC_Y   , KC_U   , KC_I   , KC_O   , KC_P    , KC_BSPC,
+        KC_LGUI, KC_H   , KC_J   , KC_K   , KC_L   , KC_SCLN , KC_QUOT,
+                 KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH , KC_BSLS,
+
+        _______, _______, KC_SPC ,
+        KC_ENT , LT(L_NUM, KC_LBRC) , _______
+    ),
+
     [L_SYM] = LAYOUT_LR_THUMB(
         TMUXESC, KC_GRV , KC_LABK, KC_RABK, KC_MINS, KC_PIPE, _______,
         WPASS  , KC_EXLM, KC_ASTR, KC_SLSH, KC_EQL , KC_AMPR, _______,
@@ -152,7 +165,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, KC_X   ,    KC_6,    KC_5,    KC_4, KC_PERC,
 
         QK_LLCK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-        _______, XXXXXXX, XXXXXXX, KC_RALT, KC_RSFT, KC_RGUI, KC_RCTL,
+        _______, XXXXXXX, KC_RCTL, KC_RSFT, KC_RALT, KC_RGUI, _______,
                  XXXXXXX, XXXXXXX, KC_COMM, KC_DOT , _______, KC_RSFT,
 
         KC_DOT , KC_BSPC, KC_0   ,          KC_RCTL, _______, _______
@@ -193,19 +206,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
         RM_PREV, RM_NEXT, RM_TOGG,          OM_BTN1, QK_LLCK, _______
     ),
-
-    [L_ALPHA] = LAYOUT_LR_THUMB(
-        KC_ESC , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T    , KC_LCTL,
-        KC_TAB , KC_A   , KC_S   , KC_D   , KC_F   , KC_G    , KC_LALT,
-        KC_GRV , KC_Z   , KC_X   , KC_C   , KC_V   , KC_B    ,
-
-        QK_LLCK, KC_Y   , KC_U   , KC_I   , KC_O   , KC_P    , KC_BSPC,
-        KC_LSFT, KC_H   , KC_J   , KC_K   , KC_L   , KC_SCLN , KC_QUOT,
-                 KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH , KC_BSLS,
-
-        _______, _______, KC_SPC ,          KC_ENT , _______ , _______
-    )
-
     // [1] = LAYOUT_LR_THUMB(
     //     _______, _______, _______, _______, _______, _______, _______,
     //     _______, _______, _______, _______, _______, _______, _______,
