@@ -93,8 +93,8 @@ enum keycode_aliases {
     HRM_M = LT(L_WIN, KC_M),
     //HRM_SLSH = LT(L_FUN, KC_SLSH),
 
-    THMB_L3 = LT(L_NAV, KC_MINS),
-    THMB_L2 = LT(L_SYM, KC_EQL),
+    THMB_L3 = LT(L_NAV, KC_EQL),
+    THMB_L2 = LT(L_SYM, KC_MINS),
     THMB_L1 = LCTL_T(KC_SPC),
     THMB_R1 = RCTL_T(KC_ENT),
     THMB_R2 = LT(L_SYM, KC_LBRC),
@@ -200,7 +200,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_GRV , KC_Z   , KC_X   , KC_C   , KC_V   , KC_B    ,
 
         QK_LLCK, KC_Y   , KC_U   , KC_I   , KC_O   , KC_P    , KC_BSPC,
-        KC_LSFT, KC_H   , KC_J   , KC_M   , KC_L   , KC_SCLN , KC_QUOT,
+        KC_LSFT, KC_H   , KC_J   , KC_K   , KC_L   , KC_SCLN , KC_QUOT,
                  KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH , KC_BSLS,
 
         _______, _______, KC_SPC ,          KC_ENT , _______ , _______
