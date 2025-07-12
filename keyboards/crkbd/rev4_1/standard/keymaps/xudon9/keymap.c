@@ -42,6 +42,7 @@ enum layers {
     L_WIN,
     L_FUN,
     L_EXT,
+    L_ALPHA,
 };
 
 enum custom_keycodes {
@@ -51,6 +52,7 @@ enum custom_keycodes {
     USRNAME,
     TMUXESC,
     WPASS,
+    HPASS,
     SRCHSEL,
     // RGBNEXT,
     // RGBHUP,
@@ -72,53 +74,52 @@ enum custom_keycodes {
     // M_NOOP,
 };
 
-// HRM: Index fingers
-#define HR_F LT(L_NAV, KC_F)
-#define HR_J LT(L_NUM, KC_J)
-// HRM: Middle fingers
-#define HR_D LALT_T(KC_D)
-#define HR_K RALT_T(KC_K)
-// HRM: Ring fingers
-#define HR_S LT(L_SYM, KC_S)
-#define HR_L LT(L_SYM, KC_L)
-// HRM: Pinky fingers
-#define HR_A LGUI_T(KC_A)
-#define HR_SCLN RGUI_T(KC_SCLN)
-// HRM: Others
-#define HR_V LT(L_EXT, KC_V)
-#define HR_M LT(L_WIN, KC_M)
-#define HR_SLSH LT(L_FUN, KC_SLSH)
+enum keycode_aliases {
+    // Short aliases for home row mods
+    // HRM: Index fingers
+    HRM_F = LT(L_NAV, KC_F),
+    HRM_J = LT(L_NUM, KC_J),
+    // HRM: Middle fingers
+    HRM_D = LSFT_T(KC_D),
+    HRM_K = RSFT_T(KC_K),
+    // HRM: Ring fingers
+    HRM_S = LALT_T(KC_S),
+    HRM_L = RALT_T(KC_L),
+    // HRM: Pinky fingers
+    HRM_A    = LGUI_T(KC_A),
+    HRM_SCLN = RGUI_T(KC_SCLN),
+    // HRM: Others
+    HRM_V = LT(L_EXT, KC_V),
+    HRM_M = LT(L_WIN, KC_M),
+    //HRM_SLSH = LT(L_FUN, KC_SLSH),
 
-#define THMB_L3 LT(L_NAV, KC_LBRC)
-#define THMB_R3 LT(L_NAV, KC_RBRC)
-#define THMB_L2 LSFT_T(KC_ESC)
-#define THMB_R2 RSFT_T(KC_BSPC)
-#define THMB_L1 LCTL_T(KC_SPC)
-#define THMB_R1 RCTL_T(KC_ENT)
+    THMB_L3 = LT(L_NAV, KC_MINS),
+    THMB_L2 = LT(L_SYM, KC_EQL),
+    THMB_L1 = LCTL_T(KC_SPC),
+    THMB_R1 = RCTL_T(KC_ENT),
+    THMB_R2 = LT(L_SYM, KC_LBRC),
+    THMB_R3 = LT(L_NAV, KC_RBRC),
 
-#define C_PGUP C(KC_PGUP)
-#define C_PGDN C(KC_PGDN)
-#define G_TAB G(KC_TAB)     // GUI+Tab
-#define G_ENT G(KC_ENT)     // GUI+Enter
-#define A_TAB A(KC_TAB)     // Alt+Tab
-#define SA_TAB S(A(KC_TAB)) // Shift+Alt+Tab
-
-#define KC_TODO _______ // Placeholder for TODO key
-
-#define EXT_UNDS KC_UNDS // LT(L_EXT, KC_UNDS)
+    C_PGUP = C(KC_PGUP),
+    C_PGDN = C(KC_PGDN),
+    G_TAB  = G(KC_TAB),    // GUI+Tab
+    G_ENT  = G(KC_ENT),    // GUI+Enter
+    A_TAB  = A(KC_TAB),    // Alt+Tab
+    SA_TAB = S(A(KC_TAB)), // Shift+Alt+Tab
+};
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [L_BASE] = LAYOUT_LR_THUMB(
-        KC_GRV , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   , KC_LEFT,
-        KC_TAB , HR_A   , HR_S   , HR_D   , HR_F   , KC_G   , KC_RGHT,
-        KC_MINS, KC_Z   , KC_X   , KC_C   , HR_V   , KC_B   ,
+        KC_ESC , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T    , KC_LEFT,
+        KC_TAB , HRM_A  , HRM_S  , HRM_D  , HRM_F  , KC_G    , KC_RGHT,
+        KC_GRV , KC_Z   , KC_X   , KC_C   , HRM_V  , KC_B    ,
 
-        KC_KP_0, KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSLS,
-        KC_COLN, KC_H   , HR_J   , HR_K   , HR_L   , HR_SCLN, KC_QUOT,
-                 KC_N   , HR_M   , KC_COMM, KC_DOT , HR_SLSH, KC_EQL ,
+        KC_KP_0, KC_Y   , KC_U   , KC_I   , KC_O   , KC_P    , KC_BSPC,
+        KC_COLN, KC_H   , HRM_J  , HRM_K  , HRM_L  , HRM_SCLN, KC_QUOT,
+                 KC_N   , HRM_M  , KC_COMM, KC_DOT , KC_SLSH , KC_BSLS,
 
-        THMB_L3, THMB_L2, THMB_L1,          THMB_R1, THMB_R2, THMB_R3
+        THMB_L3, THMB_L2, THMB_L1,          THMB_R1, THMB_R2 , THMB_R3
     ),
 
     [L_SYM] = LAYOUT_LR_THUMB(
@@ -126,11 +127,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         WPASS  , KC_EXLM, KC_ASTR, KC_SLSH, KC_EQL , KC_AMPR, _______,
         STDCC  , KC_TILD, KC_PLUS, KC_LBRC, KC_RBRC, KC_PERC,
 
-        _______, KC_CIRC, KC_LCBR, KC_RCBR, KC_DLR , ARROW  , _______,
-        _______, KC_HASH, KC_LPRN, KC_RPRN, KC_SCLN, KC_DQUO, WPASS  ,
+        QK_LLCK, KC_CIRC, KC_LCBR, KC_RCBR, KC_DLR , ARROW  , _______,
+        _______, KC_HASH, KC_LPRN, KC_RPRN, KC_SCLN, KC_DQUO, HPASS  ,
                  KC_AT  , KC_COLN, KC_COMM, KC_DOT , KC_QUOT, _______,
 
-        _______, USRNAME, _______,          _______, _______, _______
+        _______, _______, USRNAME,          WPASS  , _______, _______
     ),
 
     [L_NAV] = LAYOUT_LR_THUMB(
@@ -138,11 +139,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, KC_LALT, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, _______,
         _______, KC_LGUI, KC_PGUP, KC_PGDN, SELLINE, XXXXXXX,
 
-        _______, KC_PGUP, KC_HOME,   KC_UP,  KC_END, SRCHSEL, _______,
+        QK_LLCK, KC_PGUP, KC_HOME,   KC_UP,  KC_END, SRCHSEL, _______,
         _______, KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL , _______,
                  C(KC_Z), SELWBAK, SELWORD, KC_APP , C(KC_R), _______,
 
-        _______, KC_WBAK,  G_TAB ,          _______, QK_LLCK, _______
+        _______, KC_WBAK,  G_TAB ,          _______, _______, _______
     ),
 
     [L_NUM] = LAYOUT_LR_THUMB(
@@ -150,11 +151,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, KC_MINS,    KC_3,    KC_2,    KC_1, KC_PLUS, _______,
         _______, KC_X   ,    KC_6,    KC_5,    KC_4, KC_PERC,
 
-        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+        QK_LLCK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
         _______, XXXXXXX, XXXXXXX, KC_RALT, KC_RSFT, KC_RGUI, KC_RCTL,
                  XXXXXXX, XXXXXXX, KC_COMM, KC_DOT , _______, KC_RSFT,
 
-        KC_DOT , KC_BSPC, KC_0   ,          KC_RCTL, QK_LLCK, _______
+        KC_DOT , KC_BSPC, KC_0   ,          KC_RCTL, _______, _______
     ),
 
     [L_WIN] = LAYOUT_LR_THUMB(
@@ -162,11 +163,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, XXXXXXX, G(KC_3), G(KC_2), G(KC_1), G(KC_D), _______,
         _______, XXXXXXX, G(KC_6), G(KC_5), G(KC_4), G(KC_W),
 
-        _______, XXXXXXX, XXXXXXX, KC_VOLU, XXXXXXX, XXXXXXX, XXXXXXX,
+        QK_LLCK, XXXXXXX, XXXXXXX, KC_VOLU, XXXXXXX, XXXXXXX, XXXXXXX,
         _______, XXXXXXX, KC_MPRV, KC_VOLD, KC_MNXT, KC_LALT, XXXXXXX,
                  XXXXXXX, SA_TAB , A_TAB  , XXXXXXX, XXXXXXX, G_ENT  ,
 
-        _______, _______, _______,          KC_MPLY, QK_LLCK, _______
+        _______, _______, KC_MPLY,          KC_MPLY, _______, _______
     ),
 
     [L_FUN] = LAYOUT_LR_THUMB(
@@ -174,7 +175,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_CAPS, KC_F10 , KC_F3  , KC_F2  , KC_F1  , XXXXXXX, XXXXXXX,
         XXXXXXX, KC_F11 , KC_F6  , KC_F5  , KC_F4  , XXXXXXX,
 
-        XXXXXXX, XXXXXXX, XXXXXXX, KC_INS , XXXXXXX, XXXXXXX, QK_BOOT,
+        QK_LLCK, XXXXXXX, XXXXXXX, KC_INS , XXXXXXX, XXXXXXX, QK_BOOT,
         XXXXXXX, XXXXXXX, KC_PSCR, KC_DEL , XXXXXXX, XXXXXXX, XXXXXXX,
                  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, QK_RBT ,
 
@@ -186,11 +187,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         XXXXXXX, RM_HUEU, RM_SATU, RM_VALU, _______, _______, _______,
         QK_BOOT, RM_HUED, RM_SATD, RM_VALD, _______, _______,
 
-        _______, OM_W_U , OM_BTN1, OM_U   , OM_BTN2, SRCHSEL, CG_TOGG,
+        QK_LLCK, OM_W_U , OM_BTN1, OM_U   , OM_BTN2, SRCHSEL, CG_TOGG,
         _______, OM_W_D , OM_L   , OM_D   , OM_R   , OM_SLOW, _______,
                  _______, _______, _______, _______, _______, _______,
 
         RM_PREV, RM_NEXT, RM_TOGG,          OM_BTN1, QK_LLCK, _______
+    ),
+
+    [L_ALPHA] = LAYOUT_LR_THUMB(
+        KC_ESC , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T    , KC_LCTL,
+        KC_TAB , KC_A   , KC_S   , KC_D   , KC_F   , KC_G    , KC_LALT,
+        KC_GRV , KC_Z   , KC_X   , KC_C   , KC_V   , KC_B    ,
+
+        QK_LLCK, KC_Y   , KC_U   , KC_I   , KC_O   , KC_P    , KC_BSPC,
+        KC_LSFT, KC_H   , KC_J   , KC_M   , KC_L   , KC_SCLN , KC_QUOT,
+                 KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH , KC_BSLS,
+
+        _______, _______, KC_SPC ,          KC_ENT , _______ , _______
     )
 
     // [1] = LAYOUT_LR_THUMB(
@@ -216,10 +229,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ///////////////////////////////////////////////////////////////////////////////
 
 const uint16_t caps_combo[] PROGMEM = {KC_C, KC_COMM, COMBO_END};
-// const uint16_t fn_combo[] PROGMEM   = {KC_H, HR_J, COMBO_END};
+const uint16_t fn_combo[] PROGMEM   = {KC_H, HRM_J, COMBO_END};
+const uint16_t alpha_combo[] PROGMEM   = {KC_Z, KC_SLSH, COMBO_END};
 combo_t key_combos[] = {
     COMBO(caps_combo, CW_TOGG), // C and , => Activate Caps Word
-    // COMBO(fn_combo, OSL(L_FUN)), // H and J => L_FUN Layer
+    COMBO(fn_combo, OSL(L_FUN)), // H and J => L_FUN Layer
+    COMBO(alpha_combo, TG(L_ALPHA)), // Z and / => Toggle L_ALPHA Layer
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -272,6 +287,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         switch (keycode) {
         case WPASS:
             SEND_STRING_DELAY(WPASS_STR, TAP_CODE_DELAY);
+            return false;
+        case HPASS:
+            SEND_STRING_DELAY(HPASS_STR, TAP_CODE_DELAY);
             return false;
         case UPDIR:
             SEND_STRING_DELAY("../", TAP_CODE_DELAY);
