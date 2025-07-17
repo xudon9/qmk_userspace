@@ -83,8 +83,8 @@ enum keycode_aliases {
     HRM_D = LSFT_T(KC_D),
     HRM_K = RSFT_T(KC_K),
     // HRM: Ring fingers
-    HRM_S = LALT_T(KC_S),
-    HRM_L = RALT_T(KC_L),
+    HRM_S = LT(L_SYM, KC_S),
+    HRM_L = LT(L_SYM, KC_L),
     // HRM: Pinky fingers
     HRM_A    = LGUI_T(KC_A),
     HRM_SCLN = RGUI_T(KC_SCLN),
@@ -94,10 +94,10 @@ enum keycode_aliases {
     //HRM_SLSH = LT(L_FUN, KC_SLSH),
 
     THMB_L3 = LT(L_NAV, KC_EQL),
-    THMB_L2 = LT(L_SYM, KC_MINS),
+    THMB_L2 = LALT_T(KC_MINS),
     THMB_L1 = LCTL_T(KC_SPC),
     THMB_R1 = RCTL_T(KC_ENT),
-    THMB_R2 = LT(L_SYM, KC_LBRC),
+    THMB_R2 = RALT_T(KC_LBRC),
     THMB_R3 = LT(L_NAV, KC_RBRC),
 
     C_PGUP = C(KC_PGUP),
@@ -105,6 +105,7 @@ enum keycode_aliases {
     G_TAB  = G(KC_TAB),    // GUI+Tab
     G_ENT  = G(KC_ENT),    // GUI+Enter
     A_TAB  = A(KC_TAB),    // Alt+Tab
+    A_F4   = A(KC_F4),     // Alt+F4
     SA_TAB = S(A(KC_TAB)), // Shift+Alt+Tab
 };
 
@@ -152,8 +153,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, KC_LALT, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, _______,
         _______, KC_LGUI, KC_PGUP, KC_PGDN, SELLINE, XXXXXXX,
 
-        QK_LLCK, KC_PGUP, KC_HOME,   KC_UP,  KC_END, SRCHSEL, _______,
-        _______, KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL , _______,
+        QK_LLCK, KC_PGUP, KC_HOME,   KC_UP,  KC_END, SRCHSEL, KC_DEL ,
+        _______, KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL , KC_INS ,
                  C(KC_Z), SELWBAK, SELWORD, KC_APP , C(KC_R), _______,
 
         _______, KC_WBAK,  G_TAB ,          _______, _______, _______
@@ -172,11 +173,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [L_WIN] = LAYOUT_LR_THUMB(
-        _______, XXXXXXX, KC_MUTE, KC_VOLD, KC_VOLU, XXXXXXX, _______,
+        _______, A_F4   , KC_MUTE, KC_VOLD, KC_VOLU, XXXXXXX, _______,
         _______, XXXXXXX, G(KC_3), G(KC_2), G(KC_1), G(KC_D), _______,
         _______, XXXXXXX, G(KC_6), G(KC_5), G(KC_4), G(KC_W),
 
-        QK_LLCK, XXXXXXX, XXXXXXX, KC_VOLU, XXXXXXX, XXXXXXX, XXXXXXX,
+        QK_LLCK, XXXXXXX, XXXXXXX, KC_VOLU, XXXXXXX, XXXXXXX, A_F4   ,
         _______, XXXXXXX, KC_MPRV, KC_VOLD, KC_MNXT, KC_LALT, XXXXXXX,
                  XXXXXXX, SA_TAB , A_TAB  , XXXXXXX, XXXXXXX, G_ENT  ,
 
