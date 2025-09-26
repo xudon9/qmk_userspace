@@ -18,8 +18,8 @@
 // clang-format on
 
 // Matrix positions of the left hand home row keys.
-#define LEFT_HOME_ROW           1
-#define LEFT_HOME_PINKY_COL     1
-#define LEFT_HOME_RING_COL      2
-#define LEFT_HOME_MIDDLE_COL    3
-#define LEFT_HOME_INDEX_COL     4
+#define LEFT_HOME_ROW 1
+#define LEFT_HOME_PINKY_COL 1
+#define LEFT_HOME_RING_COL 2
+#define LEFT_HOME_MIDDLE_COL 3
+#define LEFT_HOME_INDEX_COL 4

@@ -50,9 +50,12 @@ enum custom_keycodes {
     UPDIR,
     STDCC,
     USRNAME,
+    MOBILE,
+    RESID,
     TMUXESC,
-    WPASS,
-    HPASS,
+    PASS1,
+    PASS2,
+    PASS3,
     SRCHSEL,
     // RGBNEXT,
     // RGBHUP,
@@ -91,7 +94,7 @@ enum keycode_aliases {
     // HRM: Others
     HRM_V = LT(L_EXT, KC_V),
     HRM_M = LT(L_WIN, KC_M),
-    //HRM_SLSH = LT(L_FUN, KC_SLSH),
+    // HRM_SLSH = LT(L_FUN, KC_SLSH),
 
     THMB_L3 = LT(L_NAV, KC_EQL),
     THMB_L2 = LALT_T(KC_MINS),
@@ -116,7 +119,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB , HRM_A  , HRM_S  , HRM_D  , HRM_F  , KC_G    , KC_RGHT,
         KC_GRV , KC_Z   , KC_X   , KC_C   , HRM_V  , KC_B    ,
 
-        KC_KP_0, KC_Y   , KC_U   , KC_I   , KC_O   , KC_P    , KC_BSPC,
+        KC_0,    KC_Y   , KC_U   , KC_I   , KC_O   , KC_P    , KC_BSPC,
         KC_COLN, KC_H   , HRM_J  , HRM_K  , HRM_L  , HRM_SCLN, KC_QUOT,
                  KC_N   , HRM_M  , KC_COMM, KC_DOT , KC_SLSH , KC_BSLS,
 
@@ -138,14 +141,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [L_SYM] = LAYOUT_LR_THUMB(
         TMUXESC, KC_GRV , KC_LABK, KC_RABK, KC_MINS, KC_PIPE, _______,
-        WPASS  , KC_EXLM, KC_ASTR, KC_SLSH, KC_EQL , KC_AMPR, _______,
+        _______, KC_EXLM, KC_ASTR, KC_SLSH, KC_EQL , KC_AMPR, _______,
         STDCC  , KC_TILD, KC_PLUS, KC_LBRC, KC_RBRC, KC_PERC,
 
         QK_LLCK, KC_CIRC, KC_LCBR, KC_RCBR, KC_DLR , ARROW  , _______,
-        _______, KC_HASH, KC_LPRN, KC_RPRN, KC_SCLN, KC_DQUO, HPASS  ,
+        _______, KC_HASH, KC_LPRN, KC_RPRN, KC_SCLN, KC_DQUO, _______,
                  KC_AT  , KC_COLN, KC_COMM, KC_DOT , KC_QUOT, _______,
 
-        _______, _______, USRNAME,          WPASS  , _______, _______
+        RESID  , MOBILE , USRNAME,          PASS1  , PASS2  , PASS3
     ),
 
     [L_NAV] = LAYOUT_LR_THUMB(
@@ -229,12 +232,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // User macro callbacks (https://docs.qmk.fm/feature_macros)
 ///////////////////////////////////////////////////////////////////////////////
 
-const uint16_t caps_combo[] PROGMEM = {KC_C, KC_COMM, COMBO_END};
-const uint16_t fn_combo[] PROGMEM   = {KC_H, HRM_J, COMBO_END};
-const uint16_t alpha_combo[] PROGMEM   = {KC_Z, KC_SLSH, COMBO_END};
-combo_t key_combos[] = {
-    COMBO(caps_combo, CW_TOGG), // C and , => Activate Caps Word
-    COMBO(fn_combo, OSL(L_FUN)), // H and J => L_FUN Layer
+const uint16_t caps_combo[] PROGMEM  = {KC_C, KC_COMM, COMBO_END};
+const uint16_t fn_combo[] PROGMEM    = {KC_H, HRM_J, COMBO_END};
+const uint16_t alpha_combo[] PROGMEM = {KC_Z, KC_SLSH, COMBO_END};
+combo_t        key_combos[]          = {
+    COMBO(caps_combo, CW_TOGG),      // C and , => Activate Caps Word
+    COMBO(fn_combo, OSL(L_FUN)),     // H and J => L_FUN Layer
     COMBO(alpha_combo, TG(L_ALPHA)), // Z and / => Toggle L_ALPHA Layer
 };
 
@@ -283,28 +286,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     //     }
     //    return true;
     //}
-
+ 
     if (record->event.pressed) {
+#define CASE_KEY_STR(k, s) case k: SEND_STRING_DELAY(s, TAP_CODE_DELAY); return false
+#define CASE_KEY(k) CASE_KEY_STR(k, k##_STR)
+#define CASE_PASS(n) CASE_KEY(PASS##n)
         switch (keycode) {
-        case WPASS:
-            SEND_STRING_DELAY(WPASS_STR, TAP_CODE_DELAY);
-            return false;
-        case HPASS:
-            SEND_STRING_DELAY(HPASS_STR, TAP_CODE_DELAY);
-            return false;
-        case UPDIR:
-            SEND_STRING_DELAY("../", TAP_CODE_DELAY);
-            return false;
-        case STDCC:
-            SEND_STRING_DELAY("std::", TAP_CODE_DELAY);
-            return false;
+	CASE_PASS(1);
+	CASE_PASS(2);
+	CASE_PASS(3);
+	CASE_KEY(USRNAME);
+	CASE_KEY(RESID);
+	CASE_KEY(MOBILE);
+	CASE_KEY_STR(UPDIR, "../");
+	CASE_KEY_STR(STDCC, "std::");
         case TMUXESC:
             // TODO
             return false;
-        case USRNAME:
-            SEND_STRING_DELAY("xudon9", TAP_CODE_DELAY);
-            return false;
-        case ARROW: {
+        case ARROW:
             char const *string = alt ? (shift_mods ? "<=>" : "<->") : (shift_mods ? "=>" : "->");
             SEND_STRING_DELAY(string, TAP_CODE_DELAY);
             return false;
@@ -312,7 +311,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             // Mac users, change LCTL to LGUI.
             SEND_STRING_DELAY(SS_LCTL("ct") SS_DELAY(100) SS_LCTL("v") SS_TAP(X_ENTER), TAP_CODE_DELAY);
             return false;
-        }
+#undef CASE_PASS
+#undef CASE_KEY
+#undef CASE_STR_KEY
         }
     }
 
